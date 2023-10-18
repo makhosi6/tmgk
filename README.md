@@ -234,10 +234,9 @@ $person->lt_child->remove($child);
 ```
 
 ### Instructions
+You work for a company that offers life insurance.
 
-    You work for a company that offers life insurance.
+You are tasked with fixing some broken functionality on this customer relationship management (CRM) application that the company uses to manage cases, policies and customers.
 
-    You are tasked with fixing some broken functionality on this customer relationship management (CRM) application that the company uses to manage cases, policies and customers.
-
-    Navigate the local running website [http://localhost:8000/instructions](http://localhost:8000/instructions) for information on what needs to be fixed for this assignment.
-    FYI: Api docs are at [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
+Navigate the local running website [http://localhost:8000/instructions](http://localhost:8000/instructions) for information on what needs to be fixed for this assignment.
+FYI: Api docs are at [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
