@@ -20,9 +20,9 @@ class SugarcrmController extends Controller
 
         if ( empty($moduleName) && empty($id) && empty($view) ) {
 
-            $lastCreatedPolicyName = "";
-            $totalNumOfDecreaseCoverCases = 0;
-            $totalNumOfCancelCoverCases = 0;
+            $lastCreatedPolicyName = GeneralUtils::getLatestPolicy();
+            $totalNumOfDecreaseCoverCases = GeneralUtils::decreasedCoverCaseCount();
+            $totalNumOfCancelCoverCases = GeneralUtils::cancelledCoverCaseCount();
 
             $base->assign('totalNumOfDecreaseCoverCases', $totalNumOfDecreaseCoverCases);
             $base->assign('totalNumOfCancelCoverCases', $totalNumOfCancelCoverCases);
@@ -46,7 +46,7 @@ class SugarcrmController extends Controller
             if ( empty($bean->id) ) {
                 abort(404, "Not found!");
             }
-            
+
         } else {
             abort(500, "Bean class not found!");
         }
@@ -82,7 +82,7 @@ class SugarcrmController extends Controller
             foreach($data as $fieldName => $fieldValue) {
                 $bean->{$fieldName} = $fieldValue;
             }
-            
+
             //Checkboxes wont be submitted if unchecked therefore if a field is in the validation list
             //...but not in the submitted data then its an unchecked checkbox
             $checkBoxFields = array_diff_key($fieldsToValidate, $data);
@@ -128,7 +128,7 @@ class SugarcrmController extends Controller
         global $moduleVardefs;
         $className = "{$moduleName}";
         $beans = $className::all()->toArray();
-        
+
         $base = new \Smarty();//
         $base ->assign('beans', $beans);
         $base ->assign('beanName', $moduleName);

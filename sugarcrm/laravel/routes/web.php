@@ -50,7 +50,7 @@ Route::group(['prefix'=>'api'], function() {
     Route::post("module/lt_customer/create", [ApiController::class, 'createCustomer']);
     Route::get("module/lt_customer/get/{id}", [ApiController::class, 'getCustomer']);
 
-    
+
     Route::put("module/lt_case/{id}/remove-customer", [ApiController::class, 'removeCustomerFromCase']);
     Route::put("module/lt_case/{id}/add-customer", [ApiController::class, 'addCustomerToCase']);
 
@@ -58,4 +58,6 @@ Route::group(['prefix'=>'api'], function() {
     Route::get("lists/customers/with-policy-names", [ApiController::class, 'getCustomersWithPolicyNames']);
     Route::put("lists/customers/update-id-number-status", [ApiController::class, 'updateHasCorrectIdNumber']);
 
+    ///
+    Route::get('lists/courses', [ApiController::class, 'getCoursesWithStudentsAndTeacher']);
 });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLtCustomerTable extends Migration
+class CreateLtCourseTable extends Migration
 {
 
     /**
@@ -14,13 +14,9 @@ class CreateLtCustomerTable extends Migration
      */
     public function up()
     {
-        Schema::create('lt_customer', function (Blueprint $table) {
+        Schema::create('lt_course', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name', 255);
-            $table->string('last_name', 255);
-            $table->string('id_number', 15);
-            $table->string('phone', 15)->nullable();
-            $table->string('id_number_status', 9)->nullable();
+            $table->integer('teacher_id')->nullable();
             $table->string('name', 255)->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
@@ -35,6 +31,6 @@ class CreateLtCustomerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lt_customer');
+        Schema::dropIfExists('lt_course');
     }
 }

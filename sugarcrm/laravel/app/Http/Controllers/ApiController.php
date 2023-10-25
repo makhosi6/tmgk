@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
  */
 
 class ApiController extends Controller
-{   
+{
     /**
      * @OA\Post(
      *     path="/api/module/lt_case/create",
@@ -172,7 +172,7 @@ class ApiController extends Controller
             }
 
             $customer->save();
-            
+
             return response()->json($customer);
         }
     }
@@ -253,7 +253,7 @@ class ApiController extends Controller
                 throw new \Exception("Case with id `{$id}` not found!");
             }
             $case->load_relationship("lt_customer");
-            
+
             $customer = new \lt_customer();
             $customer->retrieve_by_string_fields(['id_number' => $validated['id_number']]);
             if ( empty($customer->id) ) {
@@ -310,8 +310,16 @@ class ApiController extends Controller
             throw new \Exception("Validation failed: " . implode("\n", $errorMessages));
         } else {
             $validated = $validator->validated(); //The id number is here: $validated['id_number']
-            
-            //Add code here
+            $case = new \lt_case();
+            $case->retrieve($id);
+            $case->load_relationship("lt_customer");
+            $customer = new \lt_customer();
+            $customer->retrieve_by_string_fields(['id_number' => $validated['id_number']]);
+            if (empty($customer->id)) {
+                throw new \Exception("Customer with id number `{$validated['id_number']}` not found!");
+            }
+
+            $case->lt_customer->add($customer);
         }
 
         return $this->getCase($id);
@@ -346,9 +354,19 @@ SQL);
      *     )
      * )
      */
-    function getCustomersWithPolicyNames(Request $request) {
-        $results = [];
-        //Add code here
+    function getCustomersWithPolicyNames(Request $request)
+    {
+        $results = DB::select(<<<SQL
+        SELECT
+            lt_customer.last_name,
+            lt_customer.first_name,
+            lt_customer.id_number,
+            GROUP_CONCAT(lt_policy.name SEPARATOR ', ') as policy_names
+        FROM lt_customer
+        LEFT JOIN lt_policy ON lt_customer.id = lt_policy.customer_id
+        GROUP BY lt_customer.id
+    SQL);
+
         return response()->json($results);
     }
 
@@ -362,10 +380,76 @@ SQL);
      *     )
      * )
      */
-    function updateHasCorrectIdNumber(Request $request) {
+    function updateHasCorrectIdNumber(Request $request)
+    {
 
-        //Add code here
-        
+        DB::update(<<<SQL
+        UPDATE lt_customer
+        SET id_number_status =
+            CASE
+                WHEN CHAR_LENGTH(id_number) = 13 THEN 'correct'
+                WHEN id_number LIKE '% %' THEN 'uncertain'
+                ELSE 'incorrect'
+            END
+    SQL);
+
         return $this->getCustomers($request);
+    }
+
+
+    /**
+     *
+     */
+    function getCoursesWithStudentsAndTeacher()
+    {
+        $courses = DB::select("
+        SELECT
+            c.id as course_id,
+            c.name as course_name,
+            c.description as course_description,
+            t.id as teacher_id,
+            t.name as teacher_name,
+            t.email as teacher_email,
+            t.phone as teacher_phone,
+            s.id as student_id,
+            s.name as student_name,
+            s.email as student_email,
+            s.phone as student_phone
+        FROM lt_course c
+        LEFT JOIN lt_teacher t ON c.teacher_id = t.id
+        LEFT JOIN lt_course_students cs ON c.id = cs.course_id
+        LEFT JOIN lt_student s ON cs.student_id = s.id
+    ");
+
+    $formattedCourses = [];
+    foreach ($courses as $course) {
+        $courseId = $course->course_id;
+
+        if (!isset($formattedCourses[$courseId])) {
+            $formattedCourses[$courseId] = [
+                'course_id' => $courseId,
+                'course_name' => $course->course_name,
+                'course_description' => $course->course_description,
+                'teacher' => [
+                    'teacher_id' => $course->teacher_id,
+                    'teacher_name' => $course->teacher_name,
+                    'teacher_email' => $course->teacher_email,
+                    'teacher_phone' => $course->teacher_phone,
+                ],
+                'students' => [],
+            ];
+        }
+
+        if ($course->student_id) {
+            $formattedCourses[$courseId]['students'][] = [
+                'student_id' => $course->student_id,
+                'student_name' => $course->student_name,
+                'student_email' => $course->student_email,
+                'student_phone' => $course->student_phone,
+            ];
+        }
+    }
+
+    return response()->json(array_values($formattedCourses));
     }
 }

@@ -18,7 +18,7 @@ class CreateLtCaseTable extends Migration
             $table->id();
             $table->integer('case_id')->nullable();
             $table->integer('policy_id')->nullable();
-            $table->string('type', 20)->nullable();
+            $table->text('type')->nullable();
             $table->string('status', 6)->default('open');
             $table->string('name', 255)->nullable();
             $table->text('description')->nullable();
