@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 4.3.4, created on 2023-10-17 20:07:34
+/* Smarty version 4.3.4, created on 2023-10-20 14:01:03
   from '/var/www/sugarcrm/core/general/views/templates/content.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '4.3.4',
-  'unifunc' => 'content_652ee98644bdb7_69285397',
+  'unifunc' => 'content_6532881f0c4423_12077883',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '171c2be16b2227661ebd08825b09ee02a2e5498d' => 
     array (
       0 => '/var/www/sugarcrm/core/general/views/templates/content.tpl',
-      1 => 1697573248,
+      1 => 1697810062,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_652ee98644bdb7_69285397 (Smarty_Internal_Template $_smarty_tpl) {
+function content_6532881f0c4423_12077883 (Smarty_Internal_Template $_smarty_tpl) {
 ?><h4>Dashboard</h4><br>
 <div class="row text-center">
     <div class="col">

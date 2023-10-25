@@ -27,6 +27,7 @@ app.controller("ModuleController", function ($scope, $http, $timeout) {
 
     $scope.findAndShowCase = function() {
         httpGet('/api/module/lt_case/get/' + $scope.caseNumber, function(res){
+            $scope.shownCase = res
             $scope.caseNumber = null;
         }, function(){
             alert("Something went wrong while fetching case.");
